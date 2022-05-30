@@ -1,11 +1,14 @@
-import express, { Express, Request, Response } from "express";
+import cors from "cors";
+import express, { Express } from "express";
 import controller from "./token/TokenController";
 
- const app: Express = express();
- const port = 8080;
+const app: Express = express();
+const port = 8080;
 
- app.use('/tokens', controller)
+app.use(cors())
+app.use('/tokens', controller)
 
- app.listen(port, () => {
-   console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
- });
+
+app.listen(port, () => {
+  console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
+});
