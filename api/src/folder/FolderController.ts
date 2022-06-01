@@ -1,15 +1,31 @@
-import { Request, Router } from "express";
-import { getTokens, addToken } from "./TokenService";
-import { imageUploadMiddleware } from "../images/ImageUploadMIddleware";
+import { json, Request, Router } from "express";
+import { createNewFolder, findAllFolders } from "./FolderRepository";
 
 const controller = Router();
+controller.use(json());
 
-type NewTokenRequest = {
+type NewFolderRequest = {
   name: string;
-  metadata?: {};
-  folderId?: number;
+  parentFolderId?: number;
 };
 
+
+controller.post("/", async (req, res) => {
+    const { name, parentFolderId } = req.body as NewFolderRequest;
+    const newFolder = await createNewFolder(name, parentFolderId)
+
+    return res.json(newFolder);
+})
+
+controller.get("/", async (req, res) => {
+  const folders = await findAllFolders();
+  
+  return res.json(folders)
+})
+
+export default controller;
+
+/*
 // Get all tokens
 controller.get("/", async (req, res) => {
   const { searchParam } = req.query;
@@ -52,3 +68,4 @@ controller.post("/", imageUploadMiddleware, async (req, res) => {
 });
 
 export default controller;
+*/

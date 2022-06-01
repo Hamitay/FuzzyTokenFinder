@@ -1,9 +1,9 @@
 import { Token } from ".prisma/client";
 import { prisma } from "../db";
 
-const SIMILARITY_THRESHOLD = 0.4
+const SIMILARITY_THRESHOLD = 0.3
 
-const fetchTokens = async (searchParam: string | undefined) => {
+const fetchTokens = async (searchParam?: string) => {
   if (searchParam) {
     return await fetchSimilarTokens(searchParam)
   } else {
@@ -11,12 +11,13 @@ const fetchTokens = async (searchParam: string | undefined) => {
   }
 };
 
-const createNewToken = async (name: string, url: string, metadata: {} | undefined) => {
+const createNewToken = async (name: string, url: string, metadata?: {}, folderId?: number) => {
   return await prisma.token.create({
     data: {
       name,
       url,
-      metadata
+      metadata,
+      folderId,
     }
   })
 }
